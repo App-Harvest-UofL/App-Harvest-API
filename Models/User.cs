@@ -17,5 +17,5 @@ public class User
 
     public string email { get; set; } = null!;
 
-    public string projectList { get; set; } = null!;
+    public string contentCodes { get; set; } = null!;
 }
