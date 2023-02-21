@@ -46,7 +46,8 @@ public class MongoHelper
         var filter = Builders<User>.Filter.Eq(u => u.Id, user.Id);
         var update = Builders<User>.Update.Set(u => u.Name, user.Name)
                                       .Set(u => u.email, user.email)
-                                      .Set(u => u.contentCodes, user.contentCodes);
+                                      .Set(u => u.ContentCodes, user.ContentCodes)
+                                      .Set(u => u.Password, user.Password);
         var options = new UpdateOptions { IsUpsert = true };
         var result = await userCollection.UpdateOneAsync(filter, update, options);
         return result;
