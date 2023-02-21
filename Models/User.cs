@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using App_Harvest_API.Repo;
+using App_Harvest_API.Repo; 
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -17,5 +17,6 @@ public class User
 
     public string email { get; set; } = null!;
 
-    public string contentCodes { get; set; } = null!;
+    public string ContentCodes { get; set; } = null!;
+    public string Password { get; set; } = null!;
 }
