@@ -16,10 +16,16 @@ public class UserService
         if (result?.Result?.Password != null)
         {
             result.Result.Password = DecodeFrom64(result.Result.Password);
+            return result;
         }
+        return null;
+    }
 
-        return result; // come back to check this return and null worry 
+    public static Task<DeleteResult> deleteUser(string id)
+    {
+        MongoHelper db = new();
 
+        return  db.deleteUser(id);
     }
 
     public static Task<List<User>> getAll()
@@ -28,7 +34,7 @@ public class UserService
 
         return db.getAll();
     }
-
+        
     public static Task<UpdateResult?> createUser(User user)
     {
         MongoHelper db = new();
