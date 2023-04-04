@@ -33,6 +33,14 @@ public class MongoHelper
 
     }
 
+    public async Task<DeleteResult> deleteUser(string id)
+    {
+        Stopwatch sw = Stopwatch.StartNew();
+        var filter1 = Builders<User>.Filter.Eq("_id", id);
+        var result = await userCollection.DeleteOneAsync(filter1); 
+        return result;
+    }
+
     public async Task<List<User>> getAll()
     {
         Stopwatch sw = Stopwatch.StartNew();

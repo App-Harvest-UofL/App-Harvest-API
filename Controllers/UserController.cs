@@ -66,5 +66,18 @@ public class UserController : ControllerBase
         return StatusCode(400, "Create Failed");
     }
 
+    [HttpPost("Delete/{id}")]
+    [ProducesResponseType((int) HttpStatusCode.Forbidden)]
+    [ProducesResponseType((int) HttpStatusCode.InternalServerError)]
+    [ProducesResponseType((int) HttpStatusCode.NoContent)]
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        var result =  await UserService.deleteUser(id);
+        if(result != null)
+            return Ok(JsonConvert.SerializeObject(result));
+        return StatusCode(400, "Create Failed");
+    }
+
+
 
 }
