@@ -9,12 +9,10 @@ public class User
 
     [BsonElement("_id")]
     [BsonId]
-    public string? Id { get; set; }
+    public string? email { get; set; }
 
     public string Name { get; set; } = null!;
 
-    public string email { get; set; } = null!;
-
     public string ContentCodes { get; set; } = null!;
-    public string Password { get; set; } = null!;
+    public string password { get; set; } = null!;
 }

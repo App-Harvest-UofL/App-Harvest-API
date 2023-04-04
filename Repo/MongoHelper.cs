@@ -23,20 +23,20 @@ public class MongoHelper
 
     }
 
-    public async Task<User?> GetUser(string id)
+    public async Task<User?> GetUser(string email)
     {
         Stopwatch sw = Stopwatch.StartNew();
-        var filter = Builders<User>.Filter.Eq(x => x.Id, id);
-        var query = userCollection.Find(user => user.Id == id);
+        var filter = Builders<User>.Filter.Eq(x => x.email, email);
+        var query = userCollection.Find(user => user.email == email);
         User? result = await query.FirstOrDefaultAsync();
         return result;
 
     }
 
-    public async Task<DeleteResult> deleteUser(string id)
+    public async Task<DeleteResult> deleteUser(string email)
     {
         Stopwatch sw = Stopwatch.StartNew();
-        var filter1 = Builders<User>.Filter.Eq("_id", id);
+        var filter1 = Builders<User>.Filter.Eq("email", email);
         var result = await userCollection.DeleteOneAsync(filter1); 
         return result;
     }
@@ -51,11 +51,10 @@ public class MongoHelper
     public async Task<UpdateResult?> createUser(User user)
     {
         Stopwatch sw = Stopwatch.StartNew();
-        var filter = Builders<User>.Filter.Eq(u => u.Id, user.Id);
+        var filter = Builders<User>.Filter.Eq(u => u.email, user.email);
         var update = Builders<User>.Update.Set(u => u.Name, user.Name)
-                                      .Set(u => u.email, user.email)
                                       .Set(u => u.ContentCodes, user.ContentCodes)
-                                      .Set(u => u.Password, user.Password);
+                                      .Set(u => u.password, user.password);
         var options = new UpdateOptions { IsUpsert = true };
         var result = await userCollection.UpdateOneAsync(filter, update, options);
         return result;

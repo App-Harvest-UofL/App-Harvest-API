@@ -8,24 +8,24 @@ namespace App_Harvest_API.Services;
 
 public class UserService
 {
-    public static Task<User?> getUser(string id)
+    public static Task<User?> getUser(string email)
     {
         MongoHelper db = new();
 
-        var result =  db.GetUser(id);
-        if (result?.Result?.Password != null)
+        var result =  db.GetUser(email);
+        if (result?.Result?.password != null)
         {
-            result.Result.Password = DecodeFrom64(result.Result.Password);
+            result.Result.password = DecodeFrom64(result.Result.password);
             return result;
         }
         return null;
     }
 
-    public static Task<DeleteResult> deleteUser(string id)
+    public static Task<DeleteResult> deleteUser(string email)
     {
         MongoHelper db = new();
 
-        return  db.deleteUser(id);
+        return  db.deleteUser(email);
     }
 
     public static Task<List<User>> getAll()
@@ -38,9 +38,9 @@ public class UserService
     public static Task<UpdateResult?> createUser(User user)
     {
         MongoHelper db = new();
-        if (user.Password != null)
+        if (user.password != null)
         {
-            user.Password = EncodePasswordToBase64(user.Password);
+            user.password = EncodePasswordToBase64(user.password);
         }
         return db.createUser(user);
     }

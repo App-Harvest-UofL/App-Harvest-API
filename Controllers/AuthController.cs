@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using MongoDB.Driver;
 using MongoDB.Bson;
 
-namespace PortfolioApi.Controllers;
+namespace App_Harvest_API.Controllers;
 
 [ApiController]
 [Route("/login")]
@@ -24,18 +24,18 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(User), (int) HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Login), (int) HttpStatusCode.OK)]
     [ProducesResponseType((int) HttpStatusCode.Forbidden)]
     [ProducesResponseType((int) HttpStatusCode.InternalServerError)]
     [ProducesResponseType((int) HttpStatusCode.NoContent)]
     public async Task<bool> Login([FromBody] Login user)
     {
         User? checkUser = null;
-        if ( user.Username != null)
+        if ( user.email != null)
         {
-           checkUser = await UserService.getUser(user.Username);
+           checkUser = await UserService.getUser(user.email);
         }
-        if (checkUser?.Password == user.Password && checkUser?.Id == user.Username)
+        if (checkUser?.password == user.password && checkUser?.email == user.email)
         {
             return true;
         }

@@ -7,7 +7,7 @@ using MongoDB.Driver;
 using MongoDB.Bson;
 
 
-namespace PortfolioApi.Controllers;
+namespace App_Harvest_API.Controllers;
 
 [ApiController]
 [Route("/About")]
@@ -29,10 +29,10 @@ public class UserController : ControllerBase
     [ProducesResponseType((int) HttpStatusCode.Forbidden)]
     [ProducesResponseType((int) HttpStatusCode.InternalServerError)]
     [ProducesResponseType((int) HttpStatusCode.NoContent)]
-    public async Task<IActionResult> GetUser(string id)
+    public async Task<IActionResult> GetUser(string email)
     {
 
-        User? result = await UserService.getUser(id);
+        User? result = await UserService.getUser(email);
 
         if(result != null)
             return Ok(JsonConvert.SerializeObject(result));
@@ -70,9 +70,9 @@ public class UserController : ControllerBase
     [ProducesResponseType((int) HttpStatusCode.Forbidden)]
     [ProducesResponseType((int) HttpStatusCode.InternalServerError)]
     [ProducesResponseType((int) HttpStatusCode.NoContent)]
-    public async Task<IActionResult> DeleteUser(string id)
+    public async Task<IActionResult> DeleteUser(string email)
     {
-        var result =  await UserService.deleteUser(id);
+        var result =  await UserService.deleteUser(email);
         if(result != null)
             return Ok(JsonConvert.SerializeObject(result));
         return StatusCode(400, "Create Failed");
