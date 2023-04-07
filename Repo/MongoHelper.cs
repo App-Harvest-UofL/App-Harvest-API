@@ -1,5 +1,7 @@
 using MongoDB.Driver;
 using MongoDB.Bson;
+using MongoDB.Driver.GridFS;
+
 using System.Diagnostics;
 using App_Harvest_API.Models;
 
@@ -10,7 +12,9 @@ namespace App_Harvest_API.Repo;
 public class MongoHelper 
 {
     IMongoDatabase db;
+    GridFSBucket bucket;
     IMongoCollection<User> userCollection;
+    IMongoCollection<IFormFile> contentCollection;
 
     public MongoHelper()
     {
@@ -19,8 +23,61 @@ public class MongoHelper
         var client = new MongoClient(settings);
         db = client.GetDatabase("App-Harvest");
         userCollection = db.GetCollection<User>("Users");
+        CreateBucket();
+
+    }
+
+    public void CreateBucket()
+    {
+	   
+	    var options = new GridFSBucketOptions
+	    {
+		    BucketName ="testBucket",
+		    ChunkSizeBytes = 255 * 1024 //255 MB is the default value
+	    };
+	    bucket = new(db, options);
+    }
 
 
+    public async Task UploadAsync(IFormFile file)
+    {
+      var type = file.ContentType.ToString();
+      var fileName = file.FileName;
+
+      var options = new GridFSUploadOptions
+      {
+          Metadata = new BsonDocument { { "FileName", fileName }, { "Type", type } }
+      };
+
+      using var stream = await bucket.OpenUploadStreamAsync(fileName, options); // Open the output stream
+      var id = stream.Id; // Unique Id of the file
+      file.CopyTo(stream); // Copy the contents to the stream
+      await stream.CloseAsync(); 
+    }
+
+    public async Task<byte[]> GetFileByNameAsync(string fileName)
+    {
+        return await bucket.DownloadAsBytesByNameAsync(fileName);
+    }
+
+
+//Method 2
+
+    public async Task<byte[]> GetFileByIdAsync(string fileName)
+    {
+        var fileInfo = await FindFile(fileName);
+        return await bucket.DownloadAsBytesAsync(fileInfo.Id);
+    }
+
+    private async Task<GridFSFileInfo> FindFile(string fileName)
+    {
+        var options = new GridFSFindOptions
+        {
+            Limit = 1
+        };
+        var filter = Builders<GridFSFileInfo>.Filter.Eq(x => x.Filename, fileName);
+        using var cursor = await bucket.FindAsync(filter, options);
+        return (await cursor.ToListAsync()).FirstOrDefault();
     }
 
     public async Task<User?> GetUser(string email)
