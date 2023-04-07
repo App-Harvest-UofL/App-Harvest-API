@@ -40,6 +40,8 @@ public class UserController : ControllerBase
         return StatusCode(501, "Get Failed");
     }
 
+
+
     [HttpGet("GetAll")]
     [ProducesResponseType(typeof(List<User>), (int) HttpStatusCode.OK)]
     [ProducesResponseType((int) HttpStatusCode.Forbidden)]
@@ -73,6 +75,18 @@ public class UserController : ControllerBase
     public async Task<IActionResult> DeleteUser(string email)
     {
         var result =  await UserService.deleteUser(email);
+        if(result != null)
+            return Ok(JsonConvert.SerializeObject(result));
+        return StatusCode(400, "Create Failed");
+    }
+
+    [HttpPost("ForgotPassword/{id}")]
+    [ProducesResponseType((int) HttpStatusCode.Forbidden)]
+    [ProducesResponseType((int) HttpStatusCode.InternalServerError)]
+    [ProducesResponseType((int) HttpStatusCode.NoContent)]
+    public async Task<IActionResult> ForgotPassword(string email)
+    {
+        var result = "test"; // put password logic 
         if(result != null)
             return Ok(JsonConvert.SerializeObject(result));
         return StatusCode(400, "Create Failed");
