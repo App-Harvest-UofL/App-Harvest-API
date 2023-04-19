@@ -25,7 +25,7 @@ public class ContentController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost("Upload/{file}")]
+    [HttpPost("/{file}")]
     [ProducesResponseType(typeof(IFormFile), (int) HttpStatusCode.OK)]
     [ProducesResponseType((int) HttpStatusCode.Forbidden)]
     [ProducesResponseType((int) HttpStatusCode.InternalServerError)]
