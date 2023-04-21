@@ -44,7 +44,29 @@ public class UserService
         }
         return db.createUser(user);
     }
+    //Reset a users password by finding the user and calling createUser() to set oldpassword=newpassword
+    public static async Task<User?> userReset(string email, string newPassword)
+    {
+        MongoHelper db = new();
 
+        var user = await db.GetUser(email);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        user.password = EncodePasswordToBase64(newPassword);
+
+        var result = await db.createUser(user);
+
+        if (result == null)
+        {
+            return null;
+        }
+
+        return user;
+    }
     //this function Convert to Encord your Password
     public static string EncodePasswordToBase64(string password)
     {

@@ -84,9 +84,9 @@ public class UserController : ControllerBase
     [ProducesResponseType((int) HttpStatusCode.Forbidden)]
     [ProducesResponseType((int) HttpStatusCode.InternalServerError)]
     [ProducesResponseType((int) HttpStatusCode.NoContent)]
-    public async Task<IActionResult> ForgotPassword(string email)
+    public async Task<IActionResult> ForgotPassword(string email, string newPassword)
     {
-        var result = "test"; // put password logic 
+        var result = await UserService.userReset(email, newPassword);// put password logic 
         if(result != null)
             return Ok(JsonConvert.SerializeObject(result));
         return StatusCode(400, "Create Failed");
