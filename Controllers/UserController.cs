@@ -80,7 +80,7 @@ public class UserController : ControllerBase
         return StatusCode(400, "Create Failed");
     }
 
-    [HttpPost("ForgotPassword/{id}")]
+    [HttpPost("ForgotPassword")]
     [ProducesResponseType((int) HttpStatusCode.Forbidden)]
     [ProducesResponseType((int) HttpStatusCode.InternalServerError)]
     [ProducesResponseType((int) HttpStatusCode.NoContent)]
